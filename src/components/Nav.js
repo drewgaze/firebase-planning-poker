@@ -25,7 +25,9 @@ export default class Navigation extends Component {
   render() {
     return (
       <Navbar color="dark" dark expand="md">
-        <NavbarBrand href="/">Planning Poker</NavbarBrand>
+        <NavbarBrand tag={Link} to="/">
+          Planning Poker
+        </NavbarBrand>
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className="ml-auto" navbar>
