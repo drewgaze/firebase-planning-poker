@@ -13,8 +13,10 @@ import {
   DropdownItem
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import firebase from "config/firebase";
 
-export default class Navigation extends Component {
+class Navigation extends Component {
   state = {
     isOpen: false
   };
@@ -23,6 +25,7 @@ export default class Navigation extends Component {
       isOpen: !this.state.isOpen
     });
   render() {
+    const { isLoggedIn } = this.props;
     return (
       <Navbar color="dark" dark expand="md">
         <NavbarBrand tag={Link} to="/">
@@ -31,25 +34,36 @@ export default class Navigation extends Component {
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className="ml-auto" navbar>
-            <NavItem>
-              <NavLink tag={Link} to="/new">
-                New Game
-              </NavLink>
-            </NavItem>
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                Options
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>Option 1</DropdownItem>
-                <DropdownItem>Option 2</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Reset</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
+            {isLoggedIn && (
+              <NavItem>
+                <NavLink tag={Link} to="/new">
+                  New Game
+                </NavLink>
+              </NavItem>
+            )}
+            {isLoggedIn ? (
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                  {firebase.auth().currentUser.displayName}
+                </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem onClick={() => firebase.auth().signOut()}>Logout</DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            ) : (
+              <NavItem>
+                <NavLink tag={Link} to="/login">
+                  Login
+                </NavLink>
+              </NavItem>
+            )}
           </Nav>
         </Collapse>
       </Navbar>
     );
   }
 }
+
+const mapStateToProps = ({ user: { isLoggedIn, user } }) => ({ user, isLoggedIn });
+
+export default connect(mapStateToProps)(Navigation);

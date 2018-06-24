@@ -6,3 +6,5 @@ export const PASS = "PASS";
 export const REVEAL_ESTIMATES = "REVEAL_ESTIMATES";
 export const SET_STORY = "SET_STORY";
 export const ADD_PLAYER = "ADD_PLAYER";
+export const USER_LOGIN = "USER_LOGIN";
+export const USER_LOGOUT = "USER_LOGOUT";
