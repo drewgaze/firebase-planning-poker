@@ -3,8 +3,21 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Nav from "./components/Nav";
 import Routes from "./components/Routes";
+import firebase from "config/firebase";
+import { login, logout } from "actions/userActions";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import { compose } from "redux";
 
 class App extends Component {
+  componentDidMount() {
+    this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
+      user ? this.props.dispatch(login(user)) : this.props.dispatch(logout());
+    });
+  }
+  componentWillUnmount() {
+    this.unregisterAuthObserver();
+  }
   render() {
     return (
       <div className="App">
@@ -15,4 +28,7 @@ class App extends Component {
   }
 }
 
-export default App;
+export default compose(
+  withRouter,
+  connect()
+)(App);
