@@ -8,3 +8,7 @@ export const SET_STORY = "SET_STORY";
 export const ADD_PLAYER = "ADD_PLAYER";
 export const USER_LOGIN = "USER_LOGIN";
 export const USER_LOGOUT = "USER_LOGOUT";
+export const SET_FINAL_ESTIMATE = "SET_FINAL_ESTIMATE";
+export const GAME_UPDATE = "GAME_UPDATE";
+export const REMOVE_PLAYER = "REMOVE_PLAYER";
+export const LEAVE_GAME = "LEAVE_GAME";

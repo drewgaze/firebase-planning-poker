@@ -12,7 +12,9 @@ import { compose } from "redux";
 class App extends Component {
   componentDidMount() {
     this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
-      user ? this.props.dispatch(login(user)) : this.props.dispatch(logout());
+      user
+        ? this.props.dispatch(login({ name: user.displayName, uid: user.uid }))
+        : this.props.dispatch(logout());
     });
   }
   componentWillUnmount() {

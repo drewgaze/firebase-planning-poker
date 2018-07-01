@@ -5,11 +5,18 @@ import {
   PASS,
   REVEAL_ESTIMATES,
   SET_STORY,
-  ADD_PLAYER
+  ADD_PLAYER,
+  SET_FINAL_ESTIMATE,
+  GAME_UPDATE,
+  LEAVE_GAME,
+  REMOVE_PLAYER
 } from "actions/types";
 import sum from "lodash/sum";
+import { createSelector } from "reselect";
+import firebase from "config/firebase";
 
 const initialState = {
+  host: null,
   players: [],
   story: null,
   key: null,
@@ -28,7 +35,13 @@ export default (state = initialState, action) => {
     case JOIN_GAME:
       return {
         ...state,
-        ...action.payload
+        ...action.payload.game,
+        players: [
+          ...state.players.filter(
+            player => player.uid !== action.payload.player.uid
+          ),
+          action.payload.player
+        ]
       };
     case ESTIMATE:
       return {
@@ -57,8 +70,30 @@ export default (state = initialState, action) => {
     case ADD_PLAYER:
       return {
         ...state,
-        players: [...state.players, action.state.player]
+        players: [...state.players, action.payload.player]
       };
+    case SET_FINAL_ESTIMATE:
+      return {
+        ...state,
+        finalEstimate: action.payload.finalEstimate
+      };
+    case GAME_UPDATE:
+      return {
+        ...state,
+        ...action.payload.game
+      };
+    case LEAVE_GAME:
+      return {
+        ...initialState
+      };
+    case REMOVE_PLAYER: {
+      return {
+        ...state,
+        players: state.players.filter(
+          player => player.uid !== action.payload.uid
+        )
+      };
+    }
     default:
       return state;
   }
@@ -70,4 +105,22 @@ export const calculateFinalEstimate = estimates => {
 };
 
 export const hasPlayerEstimated = (player, estimates) =>
-  estimates.includes(estimate => estimate.playerId === player.id);
+  estimates.includes(estimate => estimate.uid === player.uid);
+
+export const getPlayers = state => state.players;
+
+export const getHost = state => state.host;
+
+export const getHostId = createSelector(
+  getHost,
+  host => (host ? host.uid : null)
+);
+
+export const isHost = createSelector(getHostId, async hostId => {
+  try {
+    const { uid } = await firebase.auth().currentUser;
+    return uid === hostId;
+  } catch (error) {
+    return false;
+  }
+});

@@ -16,14 +16,14 @@ import { createGame } from "actions/gameActions";
 
 class NewGame extends Component {
   state = {
-    name: ""
+    gameName: ""
   };
-  handleChange = evt => this.setState({ name: evt.target.value });
+  handleChange = evt => this.setState({ gameName: evt.target.value });
   handleSubmit = async evt => {
     evt.preventDefault();
     const { dispatch, history } = this.props;
-    const { name } = this.state;
-    const key = await dispatch(createGame(name));
+    const { gameName } = this.state;
+    const key = await dispatch(createGame(gameName));
     history.push(`/game/${key}`);
   };
   render() {
@@ -36,8 +36,8 @@ class NewGame extends Component {
             <CardBody className="text-left">
               <Form>
                 <FormGroup>
-                  <Label for="name">Game Name</Label>
-                  <Input type="text" name="name" id="name" onChange={this.handleChange} />
+                  <Label for="gameName">Game Name</Label>
+                  <Input type="text" name="gameName" id="gameName" onChange={this.handleChange} />
                 </FormGroup>
                 <Button type="submit" onClick={this.handleSubmit}>
                   Create Game

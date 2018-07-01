@@ -9,8 +9,11 @@ import thunk from "redux-thunk";
 import reducers from "./reducers";
 import { BrowserRouter as Router } from "react-router-dom";
 import { composeWithDevTools } from "redux-devtools-extension";
+import firebaseMiddleware from "middleware/firebase";
 
-const store = createStore(reducers, {}, composeWithDevTools(applyMiddleware(thunk)));
+const middleware = [thunk, firebaseMiddleware];
+
+const store = createStore(reducers, {}, composeWithDevTools(applyMiddleware(...middleware)));
 
 ReactDOM.render(
   <Provider store={store}>

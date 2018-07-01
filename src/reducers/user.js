@@ -1,8 +1,7 @@
 import { USER_LOGIN, USER_LOGOUT } from "actions/types";
 
 const initialState = {
-  isLoggedIn: false,
-  user: {}
+  isLoggedIn: false
 };
 
 export default (state = initialState, action) => {
@@ -11,13 +10,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoggedIn: true,
-        user: action.payload.user
+        ...action.payload.user
       };
     case USER_LOGOUT:
       return {
         ...state,
-        isLoggedIn: false,
-        user: {}
+        isLoggedIn: false
       };
     default:
       return state;
