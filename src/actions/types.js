@@ -12,3 +12,4 @@ export const SET_FINAL_ESTIMATE = "SET_FINAL_ESTIMATE";
 export const GAME_UPDATE = "GAME_UPDATE";
 export const REMOVE_PLAYER = "REMOVE_PLAYER";
 export const LEAVE_GAME = "LEAVE_GAME";
+export const RESET_ESTIMATES = "RESET_ESTIMATES";

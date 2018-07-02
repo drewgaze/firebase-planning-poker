@@ -2,9 +2,18 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isHost } from "../reducers/game";
 import firebase from "config/firebase";
-import { updateGame, joinGame, getGame, leaveGame } from "../actions/gameActions";
-
-//0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ?, Pass
+import {
+  updateGame,
+  joinGame,
+  getGame,
+  leaveGame
+} from "../actions/gameActions";
+import Story from "./Story";
+import Estimate from "./Estimate";
+import HostControls from "./HostControls";
+import EstimateCards from "./EstimateCards";
+import { ListGroup } from "reactstrap";
+import Player from "./Player";
 
 class Game extends Component {
   gameRef = firebase.database().ref(`games/${this.props.match.params.gameKey}`);
@@ -57,15 +66,20 @@ class Game extends Component {
     } = this.props;
     return (
       <div>
+        <Story />
+        <Estimate />
+        {isHost && <HostControls />}
         <div>
           game key is {gameKey} and you {isHost ? "are" : "are not"} the host.
         </div>
         <div>
           <span>players:</span>
-          <ul>{players.map(player => <li key={player.uid}>{player.name}</li>)}</ul>
+          <ListGroup>
+            {players.map(player => <Player player={player} key={player.uid} />)}
+          </ListGroup>
         </div>
+        <EstimateCards />
         {/*
-          {story}
           {estimate}
           <HostControls />
           <Players />
@@ -77,7 +91,7 @@ class Game extends Component {
   }
 }
 
-const mapStateToProps = ({ user: { uid }, game }) => ({
+const mapStateToProps = ({ game }) => ({
   isHost: isHost(game),
   players: game.players
 });

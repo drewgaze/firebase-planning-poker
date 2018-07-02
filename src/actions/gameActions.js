@@ -8,9 +8,11 @@ import {
   SET_STORY,
   GAME_UPDATE,
   LEAVE_GAME,
-  REMOVE_PLAYER
+  REMOVE_PLAYER,
+  RESET_ESTIMATES
 } from "./types";
 import firebase from "config/firebase";
+import { firebaseAction } from "middleware/firebase";
 
 const gamesRef = firebase.database().ref("games");
 
@@ -49,16 +51,15 @@ export function joinGame(key) {
   return async dispatch => {
     const game = await dispatch(getGame(key));
     const { displayName: name, uid } = firebase.auth().currentUser;
-    await dispatch({
-      type: JOIN_GAME,
-      payload: {
-        game: { key, ...game },
-        player: { name, uid }
-      },
-      meta: {
-        firebase: true
-      }
-    });
+    await dispatch(
+      firebaseAction({
+        type: JOIN_GAME,
+        payload: {
+          game: { key, ...game },
+          player: { name, uid }
+        }
+      })
+    );
   };
 }
 
@@ -70,64 +71,61 @@ export function leaveGame() {
   };
 }
 
-export function estimate(estimate) {
-  return async (dispatch, getState) => {
+export function estimate(value) {
+  return async dispatch => {
     const { uid } = await firebase.auth().currentUser;
-    dispatch({
-      type: ESTIMATE,
-      payload: {
-        estimate,
-        uid
-      },
-      meta: {
-        firebase: true
-      }
-    });
+    dispatch(
+      firebaseAction({
+        type: ESTIMATE,
+        payload: {
+          value,
+          uid
+        }
+      })
+    );
   };
 }
 
 export function pass() {
   return async dispatch => {
-    dispatch({
-      type: PASS,
-      meta: {
-        firebase: true
-      }
-    });
+    const { uid } = await firebase.auth().currentUser;
+    dispatch(
+      firebaseAction({
+        type: PASS,
+        payload: {
+          uid
+        }
+      })
+    );
   };
 }
 
 export function revealEstimates() {
-  return {
-    type: REVEAL_ESTIMATES,
-    meta: {
-      firebase: true
-    }
-  };
+  return firebaseAction({
+    type: REVEAL_ESTIMATES
+  });
+}
+
+export function resetEstimates() {
+  return firebaseAction({ type: RESET_ESTIMATES });
 }
 
 export function setStory(story) {
-  return {
+  return firebaseAction({
     type: SET_STORY,
     payload: {
       story
-    },
-    meta: {
-      firebase: true
     }
-  };
+  });
 }
 
 export function removePlayer(uid) {
-  return {
+  return firebaseAction({
     type: REMOVE_PLAYER,
     payload: {
       uid
-    },
-    meta: {
-      firebase: true
     }
-  };
+  });
 }
 
 export function updateGame(game) {

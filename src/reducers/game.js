@@ -9,7 +9,8 @@ import {
   SET_FINAL_ESTIMATE,
   GAME_UPDATE,
   LEAVE_GAME,
-  REMOVE_PLAYER
+  REMOVE_PLAYER,
+  RESET_ESTIMATES
 } from "actions/types";
 import sum from "lodash/sum";
 import { createSelector } from "reselect";
@@ -46,7 +47,12 @@ export default (state = initialState, action) => {
     case ESTIMATE:
       return {
         ...state,
-        estimates: [...state.estimates, action.payload.estimate]
+        estimates: [
+          ...state.estimates.filter(
+            estimate => estimate.uid !== action.payload.uid
+          ),
+          action.payload
+        ]
       };
     case PASS:
       return {
@@ -94,18 +100,40 @@ export default (state = initialState, action) => {
         )
       };
     }
+    case RESET_ESTIMATES: {
+      return {
+        ...state,
+        estimates: [],
+        showEstimates: false,
+        finalEstimate: null
+      };
+    }
     default:
       return state;
   }
 };
 
 export const calculateFinalEstimate = estimates => {
-  const validEstimates = estimates.filter(estimate => estimate.value != null);
+  const validEstimates = estimates
+    .filter(estimate => estimate.value != null)
+    .map(estimate => estimate.value);
   return Math.round(sum(validEstimates) / validEstimates.length);
 };
 
-export const hasPlayerEstimated = (player, estimates) =>
-  estimates.includes(estimate => estimate.uid === player.uid);
+export const getPlayerEstimate = (state, props) => {
+  const estimates = getEstimates(state);
+  return estimates.find(estimate => estimate.uid === props.player.uid);
+};
+
+export const hasPlayerEstimated = createSelector(
+  getPlayerEstimate,
+  estimate => !!estimate
+);
+
+export const getPlayerEstimateValue = createSelector(
+  getPlayerEstimate,
+  estimate => (estimate ? estimate.value : null)
+);
 
 export const getPlayers = state => state.players;
 
@@ -116,11 +144,25 @@ export const getHostId = createSelector(
   host => (host ? host.uid : null)
 );
 
-export const isHost = createSelector(getHostId, async hostId => {
+export const isHost = createSelector(getHostId, hostId => {
   try {
-    const { uid } = await firebase.auth().currentUser;
+    const { uid } = firebase.auth().currentUser;
     return uid === hostId;
   } catch (error) {
     return false;
   }
 });
+
+export const getEstimates = state => state.estimates;
+
+export const getEstimateByValue = (state, props) => {
+  const estimates = getEstimates(state);
+  return estimates.find(
+    estimate => estimate.value === props.value && estimate.uid === props.uid
+  );
+};
+
+export const isCurrentEstimate = createSelector(
+  getEstimateByValue,
+  value => !!value
+);

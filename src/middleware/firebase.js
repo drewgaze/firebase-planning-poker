@@ -6,10 +6,14 @@ export default store => next => async action => {
     const {
       game: { key, ...props }
     } = store.getState();
-    console.log("update", key);
     await firebase
       .database()
       .ref(`games/${key}`)
-      .update({ ...props });
+      .set({ ...props });
   }
 };
+
+export const firebaseAction = action => ({
+  ...action,
+  meta: { firebase: true }
+});
