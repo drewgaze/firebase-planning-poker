@@ -86,7 +86,11 @@ export default (state = initialState, action) => {
     case GAME_UPDATE:
       return {
         ...state,
-        ...action.payload.game
+        ...action.payload.game,
+        estimates: action.payload.game.estimates
+          ? action.payload.game.estimates
+          : [],
+        players: action.payload.game.players ? action.payload.game.players : []
       };
     case LEAVE_GAME:
       return {
