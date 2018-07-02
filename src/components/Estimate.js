@@ -9,7 +9,7 @@ class Estimate extends Component {
   render() {
     const { finalEstimate, showEstimates } = this.props;
     return (
-      <Card>
+      <Card className="my-2 py-2">
         <CardTitle>Points</CardTitle>
         <span>{showEstimates ? finalEstimate : "-"}</span>
       </Card>

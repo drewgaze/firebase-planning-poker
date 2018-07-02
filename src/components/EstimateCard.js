@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { estimate } from "../actions/gameActions";
-import { Card, CardTitle } from "reactstrap";
+import { Card, CardText, CardBody } from "reactstrap";
 import { isCurrentEstimate } from "../reducers/game";
 
 class EstimateCard extends Component {
@@ -16,7 +16,9 @@ class EstimateCard extends Component {
         color={this.props.color}
         inverse={this.props.inverse}
       >
-        <CardTitle>{this.props.value}</CardTitle>
+        <CardBody>
+          <CardText>{this.props.value}</CardText>
+        </CardBody>
       </Card>
     );
   }

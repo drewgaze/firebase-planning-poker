@@ -24,7 +24,7 @@ export function createGame(gameName) {
       name: gameName,
       players: [],
       estimates: [],
-      story: null,
+      story: "-",
       showEstimates: false
     });
     await dispatch({ type: CREATE_GAME, payload: { key } });
@@ -37,12 +37,7 @@ export function getGame(key) {
   return async dispatch => {
     dispatch({ type: GET_GAME });
     const snapshot = await gamesRef.child(key).once("value");
-    const {
-      players = [],
-      estimates = [],
-      story = null,
-      ...props
-    } = snapshot.val();
+    const { players = [], estimates = [], story, ...props } = snapshot.val();
     return { players, estimates, story, ...props };
   };
 }

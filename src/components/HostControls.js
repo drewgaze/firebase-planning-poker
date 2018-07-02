@@ -9,9 +9,11 @@ class HostControls extends Component {
   handleReset = () => this.props.dispatch(resetEstimates());
   render() {
     return (
-      <div>
-        <Button onClick={this.handleClick}>Flip Cards</Button>
-        <Button type="reset" onClick={this.handleReset}>
+      <div className="my-2">
+        <Button className="mx-2" onClick={this.handleClick}>
+          Flip Cards
+        </Button>
+        <Button className="mx-2" type="reset" onClick={this.handleReset}>
           Reset
         </Button>
       </div>

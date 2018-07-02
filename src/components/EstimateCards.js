@@ -8,7 +8,7 @@ class EstimateCards extends Component {
   handleChange = evt => this.setState({ story: evt.target.value });
   render() {
     return (
-      <div>
+      <div className="my-2">
         {estimateValues.map(value => (
           <EstimateCard key={value} value={value} />
         ))}

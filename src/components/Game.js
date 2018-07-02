@@ -12,7 +12,7 @@ import Story from "./Story";
 import Estimate from "./Estimate";
 import HostControls from "./HostControls";
 import EstimateCards from "./EstimateCards";
-import { ListGroup } from "reactstrap";
+import { Container, Row, Col, ListGroup, ListGroupItem } from "reactstrap";
 import Player from "./Player";
 
 class Game extends Component {
@@ -57,36 +57,26 @@ class Game extends Component {
     dispatch(leaveGame(gameKey));
   }
   render() {
-    const {
-      isHost,
-      match: {
-        params: { gameKey }
-      },
-      players
-    } = this.props;
+    const { isHost, players } = this.props;
     return (
-      <div>
-        <Story />
-        <Estimate />
-        {isHost && <HostControls />}
-        <div>
-          game key is {gameKey} and you {isHost ? "are" : "are not"} the host.
-        </div>
-        <div>
-          <span>players:</span>
-          <ListGroup>
-            {players.map(player => <Player player={player} key={player.uid} />)}
-          </ListGroup>
-        </div>
-        <EstimateCards />
-        {/*
-          {estimate}
-          <HostControls />
-          <Players />
-          <EstimateCards />
-      
-        */}
-      </div>
+      <Container className="border-bottom">
+        <Row>
+          <Col>
+            <Story />
+            <Estimate />
+            {isHost && <HostControls />}
+            <EstimateCards />
+          </Col>
+          <Col className="border-left">
+            <ListGroup flush>
+              <ListGroupItem disabled>Players</ListGroupItem>
+              {players.map(player => (
+                <Player player={player} key={player.uid} />
+              ))}
+            </ListGroup>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

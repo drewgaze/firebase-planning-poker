@@ -19,7 +19,7 @@ import firebase from "config/firebase";
 const initialState = {
   host: null,
   players: [],
-  story: null,
+  story: "-",
   key: null,
   estimates: [],
   finalEstimate: null,
@@ -121,7 +121,7 @@ export const calculateFinalEstimate = estimates => {
   const validEstimates = estimates
     .filter(estimate => estimate.value != null)
     .map(estimate => estimate.value);
-  return Math.round(sum(validEstimates) / validEstimates.length);
+  return Math.round(sum(validEstimates) / validEstimates.length) || 0;
 };
 
 export const getPlayerEstimate = (state, props) => {

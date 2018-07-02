@@ -7,8 +7,8 @@ class Player extends Component {
   render() {
     const { player, showEstimates, value, hasEstimated } = this.props;
     return (
-      <ListGroupItem color={hasEstimated ? "success" : null}>
-        <span>
+      <ListGroupItem>
+        <span className={hasEstimated ? "text-success" : null}>
           {player.name} {showEstimates && value}
         </span>
       </ListGroupItem>

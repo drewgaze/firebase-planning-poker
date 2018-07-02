@@ -20,18 +20,23 @@ class Story extends Component {
     const { edit } = this.state;
     const { story, isHost } = this.props;
     return (
-      <div>
+      <div className="my-2">
         {edit && isHost ? (
           <div>
             <Form>
               <Input
+                className="my-2"
                 defaultValue={this.props.story}
                 onChange={this.handleChange}
               />
-              <Button type="submit" onClick={this.handleSubmit}>
+              <Button
+                className="mx-2"
+                type="submit"
+                onClick={this.handleSubmit}
+              >
                 Update
               </Button>
-              <Button type="submit" onClick={this.handleClick}>
+              <Button className="mx-2" type="submit" onClick={this.handleClick}>
                 Cancel
               </Button>
             </Form>
@@ -40,7 +45,9 @@ class Story extends Component {
           <div>
             <span>{story}</span>
             {isHost && (
-              <Button onClick={this.handleClick}>Edit Story Name</Button>
+              <Button className="mx-2" onClick={this.handleClick}>
+                Edit
+              </Button>
             )}
           </div>
         )}
