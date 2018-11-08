@@ -6,7 +6,10 @@ import { Redirect } from "react-router";
 
 const uiConfig = {
   signInFlow: "popup",
-  signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    firebase.auth.EmailAuthProvider.PROVIDER_ID
+  ],
   callbacks: {
     // Avoid redirects after sign-in.
     signInSuccessWithAuthResult: () => false
@@ -19,7 +22,10 @@ class Login extends Component {
     if (isLoggedIn) return <Redirect to="/" />;
     return (
       <div>
-        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+        <StyledFirebaseAuth
+          uiConfig={uiConfig}
+          firebaseAuth={firebase.auth()}
+        />
       </div>
     );
   }

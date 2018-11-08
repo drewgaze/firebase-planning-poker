@@ -24,7 +24,7 @@ export function createGame(gameName) {
       name: gameName,
       players: [],
       estimates: [],
-      story: "-",
+      story: "",
       showEstimates: false
     });
     await dispatch({ type: CREATE_GAME, payload: { key } });
@@ -66,7 +66,7 @@ export function leaveGame() {
   };
 }
 
-export function estimate(value) {
+export function estimate(value = "") {
   return async dispatch => {
     const { uid } = await firebase.auth().currentUser;
     dispatch(

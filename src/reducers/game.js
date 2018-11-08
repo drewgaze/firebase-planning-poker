@@ -19,7 +19,7 @@ import firebase from "config/firebase";
 const initialState = {
   host: null,
   players: [],
-  story: "-",
+  story: "",
   key: null,
   estimates: [],
   finalEstimate: null,
@@ -131,7 +131,7 @@ export const getPlayerEstimate = (state, props) => {
 
 export const hasPlayerEstimated = createSelector(
   getPlayerEstimate,
-  estimate => !!estimate
+  estimate => !!(estimate && estimate.value != null)
 );
 
 export const getPlayerEstimateValue = createSelector(
@@ -143,9 +143,8 @@ export const getPlayers = state => state.players;
 
 export const getHost = state => state.host;
 
-export const getHostId = createSelector(
-  getHost,
-  host => (host ? host.uid : null)
+export const getHostId = createSelector(getHost, host =>
+  host ? host.uid : null
 );
 
 export const isHost = createSelector(getHostId, hostId => {

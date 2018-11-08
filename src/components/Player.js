@@ -8,9 +8,20 @@ class Player extends Component {
     const { player, showEstimates, value, hasEstimated } = this.props;
     return (
       <ListGroupItem>
-        <span className={hasEstimated ? "text-success" : null}>
-          {player.name} {showEstimates && value}
-        </span>
+        <div className="h-16">
+          <span>
+            {player.name}{" "}
+            {showEstimates && <span className="text-success">{value}</span>}
+          </span>
+          <span
+            className={
+              "material-icons text-success " +
+              (hasEstimated && !showEstimates ? "visible" : "invisible")
+            }
+          >
+            check
+          </span>
+        </div>
       </ListGroupItem>
     );
   }

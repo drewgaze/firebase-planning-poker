@@ -12,7 +12,7 @@ import Story from "./Story";
 import Estimate from "./Estimate";
 import HostControls from "./HostControls";
 import EstimateCards from "./EstimateCards";
-import { Container, Row, Col, ListGroup, ListGroupItem } from "reactstrap";
+import { Row, Col, Container, ListGroup, ListGroupItem } from "reactstrap";
 import Player from "./Player";
 
 class Game extends Component {
@@ -59,24 +59,40 @@ class Game extends Component {
   render() {
     const { isHost, players } = this.props;
     return (
-      <Container className="border-bottom">
-        <Row>
-          <Col>
-            <Story />
-            <Estimate />
-            {isHost && <HostControls />}
-            <EstimateCards />
-          </Col>
-          <Col className="border-left">
-            <ListGroup flush>
-              <ListGroupItem disabled>Players</ListGroupItem>
-              {players.map(player => (
-                <Player player={player} key={player.uid} />
-              ))}
-            </ListGroup>
-          </Col>
-        </Row>
-      </Container>
+      <Row className="h-100">
+        <Col className="border-right d-xs-none" md={3}>
+          <ListGroup flush>
+            <ListGroupItem>
+              <h6>Players</h6>
+            </ListGroupItem>
+            {players.map(player => (
+              <Player player={player} key={player.uid} />
+            ))}
+          </ListGroup>
+        </Col>
+        <Col md={6} className="mx-xs-2">
+          <Row>
+            <Col>
+              <Story />
+            </Col>
+            <Col>
+              <Estimate />
+            </Col>
+          </Row>
+          {isHost && <HostControls />}
+          <EstimateCards />
+        </Col>
+        <Col className="border-left d-xs-none" md={3}>
+          <ListGroup flush>
+            <ListGroupItem>
+              <h6>Stories</h6>
+            </ListGroupItem>
+            {players.map(player => (
+              <Player player={player} key={player.uid} />
+            ))}
+          </ListGroup>
+        </Col>
+      </Row>
     );
   }
 }

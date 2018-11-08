@@ -11,6 +11,7 @@ import {
   Label,
   Input
 } from "reactstrap";
+import StoryInput from "./StoryInput";
 import { connect } from "react-redux";
 import { createGame } from "actions/gameActions";
 
@@ -37,9 +38,36 @@ class NewGame extends Component {
               <Form>
                 <FormGroup>
                   <Label for="gameName">Game Name</Label>
-                  <Input type="text" name="gameName" id="gameName" onChange={this.handleChange} />
+                  <Input
+                    type="text"
+                    name="gameName"
+                    id="gameName"
+                    onChange={this.handleChange}
+                    required
+                  />
                 </FormGroup>
-                <Button type="submit" onClick={this.handleSubmit}>
+                <FormGroup tag="fieldset">
+                  <Label>Will you be estimating?</Label>
+                  <FormGroup check>
+                    <Label check>
+                      <Input type="radio" name="radio1" /> Yes
+                    </Label>
+                  </FormGroup>
+                  <FormGroup check>
+                    <Label check>
+                      <Input type="radio" name="radio1" /> No
+                    </Label>
+                  </FormGroup>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="stories">Stories</Label>
+                  <StoryInput />
+                </FormGroup>
+                <Button
+                  type="submit"
+                  onClick={this.handleSubmit}
+                  color="success"
+                >
                   Create Game
                 </Button>
               </Form>

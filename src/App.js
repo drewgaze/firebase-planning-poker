@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "material-icons/iconfont/material-icons.css";
 import Nav from "./components/Nav";
 import Routes from "./components/Routes";
 import firebase from "config/firebase";

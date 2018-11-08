@@ -10,11 +10,30 @@ class HostControls extends Component {
   render() {
     return (
       <div className="my-2">
-        <Button className="mx-2" onClick={this.handleClick}>
-          Flip Cards
+        <Button
+          className="mr-2 float-left"
+          onClick={this.handleClick}
+          color="info"
+        >
+          Previous
         </Button>
-        <Button className="mx-2" type="reset" onClick={this.handleReset}>
+        <Button className="mx-2" onClick={this.handleClick} color="success">
+          Reveal
+        </Button>
+        <Button
+          className="mx-2"
+          type="reset"
+          onClick={this.handleReset}
+          color="danger"
+        >
           Reset
+        </Button>
+        <Button
+          className="ml-2 float-right"
+          onClick={this.handleClick}
+          color="info"
+        >
+          Next
         </Button>
       </div>
     );
