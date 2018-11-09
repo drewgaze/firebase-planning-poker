@@ -1,36 +1,36 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { hasPlayerEstimated, getPlayerEstimateValue } from "../reducers/game";
+import React, { useMemo } from "react";
 import { ListGroupItem } from "reactstrap";
 
-class Player extends Component {
-  render() {
-    const { player, showEstimates, value, hasEstimated } = this.props;
-    return (
-      <ListGroupItem>
-        <div className="h-16">
-          <span>
-            {player.name}{" "}
-            {showEstimates && <span className="text-success">{value}</span>}
-          </span>
-          <span
-            className={
-              "material-icons text-success " +
-              (hasEstimated && !showEstimates ? "visible" : "invisible")
-            }
-          >
-            check
-          </span>
+const Player = ({ player, isHost, estimates, showEstimates }) => {
+  const estimate = useMemo(
+    () => {
+      const estimate = estimates.find(estimate => estimate.uid === player.uid);
+      return estimate;
+    },
+    [estimates]
+  );
+  const hasEstimated = useMemo(() => estimate && estimate.value != null, [
+    estimate
+  ]);
+
+  return (
+    <ListGroupItem>
+      <div className="h-16 flex-container space-between">
+        <span>
+          {isHost && "👑"}
+          {player.name}
+        </span>
+        <div>
+          {hasEstimated && !showEstimates && (
+            <span className="material-icons text-success">check</span>
+          )}
+          {showEstimates && (
+            <span className="text-success">{estimate.value}</span>
+          )}
         </div>
-      </ListGroupItem>
-    );
-  }
-}
+      </div>
+    </ListGroupItem>
+  );
+};
 
-const mapStateToProps = ({ game }, props) => ({
-  showEstimates: game.showEstimates,
-  value: getPlayerEstimateValue(game, props),
-  hasEstimated: hasPlayerEstimated(game, props)
-});
-
-export default connect(mapStateToProps)(Player);
+export { Player as default };

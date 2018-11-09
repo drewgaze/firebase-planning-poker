@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Collapse,
   Navbar,
@@ -13,57 +13,51 @@ import {
   DropdownItem
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
 import firebase from "config/firebase";
+import useFirebaseAuth from "hooks/useFirebaseAuth";
 
-class Navigation extends Component {
-  state = {
-    isOpen: false
-  };
-  toggle = () =>
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  render() {
-    const { isLoggedIn } = this.props;
-    return (
-      <Navbar color="dark" dark expand="md">
-        <NavbarBrand tag={Link} to="/">
-          Planning Poker
-        </NavbarBrand>
-        <NavbarToggler onClick={this.toggle} />
-        <Collapse isOpen={this.state.isOpen} navbar>
-          <Nav className="ml-auto" navbar>
-            {isLoggedIn && (
-              <NavItem>
-                <NavLink tag={Link} to="/new">
-                  New Game
-                </NavLink>
-              </NavItem>
-            )}
-            {isLoggedIn ? (
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  {firebase.auth().currentUser.displayName}
-                </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem onClick={() => firebase.auth().signOut()}>Logout</DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            ) : (
-              <NavItem>
-                <NavLink tag={Link} to="/login">
-                  Login
-                </NavLink>
-              </NavItem>
-            )}
-          </Nav>
-        </Collapse>
-      </Navbar>
-    );
-  }
-}
+const Navigation = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const user = useFirebaseAuth();
+  const toggle = useCallback(() => setIsOpen(!isOpen));
 
-const mapStateToProps = ({ user: { isLoggedIn, user } }) => ({ user, isLoggedIn });
+  return (
+    <Navbar color="dark" dark expand="md">
+      <NavbarBrand tag={Link} to="/">
+        Planning Poker
+      </NavbarBrand>
+      <NavbarToggler onClick={toggle} />
+      <Collapse isOpen={isOpen} navbar>
+        <Nav className="ml-auto" navbar>
+          {user && (
+            <NavItem>
+              <NavLink tag={Link} to="/new">
+                New Game
+              </NavLink>
+            </NavItem>
+          )}
+          {user ? (
+            <UncontrolledDropdown nav inNavbar>
+              <DropdownToggle nav caret>
+                {user.displayName}
+              </DropdownToggle>
+              <DropdownMenu right>
+                <DropdownItem onClick={() => firebase.auth().signOut()}>
+                  Logout
+                </DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          ) : (
+            <NavItem>
+              <NavLink tag={Link} to="/login">
+                Login
+              </NavLink>
+            </NavItem>
+          )}
+        </Nav>
+      </Collapse>
+    </Navbar>
+  );
+};
 
-export default connect(mapStateToProps)(Navigation);
+export { Navigation as default };

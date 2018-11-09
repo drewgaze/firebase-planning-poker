@@ -1,105 +1,111 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { isHost } from "../reducers/game";
-import firebase from "config/firebase";
-import {
-  updateGame,
-  joinGame,
-  getGame,
-  leaveGame
-} from "../actions/gameActions";
-import Story from "./Story";
+import React, { useEffect, useMemo } from "react";
+import StoryTitle from "./StoryTitle";
 import Estimate from "./Estimate";
 import HostControls from "./HostControls";
 import EstimateCards from "./EstimateCards";
-import { Row, Col, Container, ListGroup, ListGroupItem } from "reactstrap";
+import { Row, Col, ListGroup, ListGroupItem } from "reactstrap";
 import Player from "./Player";
+import Stories from "./Stories";
+import useFirebaseAuth from "hooks/useFirebaseAuth";
+import useGameState from "hooks/useGameState";
 
-class Game extends Component {
-  gameRef = firebase.database().ref(`games/${this.props.match.params.gameKey}`);
-  getCurrentUser = () =>
-    new Promise(resolve => {
-      const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          resolve(user);
-          unsubscribe();
-        }
-      });
-    });
-  joinGame = async () => {
-    const {
-      dispatch,
-      match: {
-        params: { gameKey }
+const Game = props => {
+  const user = useFirebaseAuth();
+  const [game, dispatch, isReady] = useGameState(props.match.params.gameKey);
+
+  const {
+    players,
+    estimates,
+    showEstimates,
+    host,
+    stories,
+    currentStory: index,
+    finalEstimate
+  } = game;
+
+  const isHost = useMemo(() => user && host && user.uid === host.uid, [
+    user,
+    host
+  ]);
+  const currentStory = useMemo(
+    () => (stories.length > 0 ? stories[index] : null),
+    [index, stories]
+  );
+
+  useEffect(
+    () => {
+      if (user && isReady) {
+        dispatch({
+          type: "JOIN",
+          payload: { name: user.displayName, uid: user.uid }
+        });
       }
-    } = this.props;
-    const { uid } = await this.getCurrentUser();
-    const game = await dispatch(getGame(gameKey));
-    if (!game.players.find(player => player.uid === uid)) {
-      dispatch(joinGame(gameKey));
-    }
-  };
-  async componentDidMount() {
-    const { dispatch } = this.props;
-    this.gameRef.on("value", snapshot => {
-      dispatch(updateGame(snapshot.val()));
-    });
-    this.joinGame();
-  }
-  componentWillUnmount() {
-    const {
-      match: {
-        params: { gameKey }
-      },
-      dispatch
-    } = this.props;
-    this.gameRef.off();
-    dispatch(leaveGame(gameKey));
-  }
-  render() {
-    const { isHost, players } = this.props;
-    return (
-      <Row className="h-100">
-        <Col className="border-right d-xs-none" md={3}>
-          <ListGroup flush>
-            <ListGroupItem>
-              <h6>Players</h6>
-            </ListGroupItem>
-            {players.map(player => (
-              <Player player={player} key={player.uid} />
-            ))}
-          </ListGroup>
-        </Col>
-        <Col md={6} className="mx-xs-2">
-          <Row>
-            <Col>
-              <Story />
-            </Col>
-            <Col>
-              <Estimate />
-            </Col>
-          </Row>
-          {isHost && <HostControls />}
-          <EstimateCards />
-        </Col>
-        <Col className="border-left d-xs-none" md={3}>
-          <ListGroup flush>
-            <ListGroupItem>
-              <h6>Stories</h6>
-            </ListGroupItem>
-            {players.map(player => (
-              <Player player={player} key={player.uid} />
-            ))}
-          </ListGroup>
-        </Col>
-      </Row>
-    );
-  }
-}
+      return () => {
+        if (user && isReady) {
+          dispatch({
+            type: "LEAVE",
+            payload: { name: user.displayName, uid: user.uid }
+          });
+        }
+      };
+    },
+    [user, isReady]
+  );
 
-const mapStateToProps = ({ game }) => ({
-  isHost: isHost(game),
-  players: game.players
-});
+  return (
+    <Row className="h-100">
+      <Col className="border-right d-none d-md-block" md={3}>
+        <ListGroup flush>
+          <ListGroupItem>
+            <h6>Players</h6>
+          </ListGroupItem>
+          {players.map(player => (
+            <Player
+              isHost={isHost && host.uid === user.uid}
+              player={player}
+              key={player.uid}
+              showEstimates={showEstimates}
+              estimates={estimates}
+            />
+          ))}
+        </ListGroup>
+      </Col>
+      <Col md={6} className="mx-2 mx-md-0 blue-bg">
+        <Row>
+          <Col>
+            <StoryTitle
+              isHost={isHost}
+              story={currentStory}
+              dispatch={dispatch}
+            />
+          </Col>
+          <Col>
+            <Estimate
+              finalEstimate={finalEstimate}
+              showEstimates={showEstimates}
+            />
+          </Col>
+        </Row>
+        {isHost && (
+          <HostControls dispatch={dispatch} disabled={estimates.length <= 0} />
+        )}
+        <EstimateCards
+          dispatch={dispatch}
+          uid={user && user.uid}
+          showEstimates={showEstimates}
+          estimates={estimates}
+        />
+      </Col>
+      <Col className="border-left d-none d-md-block" md={3}>
+        <ListGroup flush>
+          <ListGroupItem>
+            <h6>Stories</h6>
+          </ListGroupItem>
+          <Stories stories={stories} currentStory={index} />
+        </ListGroup>
+      </Col>
+    </Row>
+  );
+};
 
-export default connect(mapStateToProps)(Game);
+export { Game as default };

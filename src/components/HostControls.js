@@ -1,43 +1,54 @@
-import React, { Component } from "react";
+import React, { useCallback } from "react";
 import { Button } from "reactstrap";
-import { connect } from "react-redux";
-import { revealEstimates, resetEstimates } from "../actions/gameActions";
 
-class HostControls extends Component {
-  handleChange = evt => this.setState({ story: evt.target.value });
-  handleClick = () => this.props.dispatch(revealEstimates());
-  handleReset = () => this.props.dispatch(resetEstimates());
-  render() {
-    return (
-      <div className="my-2">
-        <Button
-          className="mr-2 float-left"
-          onClick={this.handleClick}
-          color="info"
-        >
-          Previous
-        </Button>
-        <Button className="mx-2" onClick={this.handleClick} color="success">
-          Reveal
-        </Button>
-        <Button
-          className="mx-2"
-          type="reset"
-          onClick={this.handleReset}
-          color="danger"
-        >
-          Reset
-        </Button>
-        <Button
-          className="ml-2 float-right"
-          onClick={this.handleClick}
-          color="info"
-        >
-          Next
-        </Button>
-      </div>
-    );
-  }
-}
+const HostControls = ({ dispatch, disabled }) => {
+  const handleReveal = useCallback(() => dispatch({ type: "SHOW_ESTIMATES" }), [
+    dispatch
+  ]);
+  const handleReset = useCallback(() => dispatch({ type: "RESET" }), [
+    dispatch
+  ]);
+  const handleNext = useCallback(() => dispatch({ type: "NEXT_STORY" }), [
+    dispatch
+  ]);
+  const handlePrev = useCallback(() => dispatch({ type: "PREVIOUS_STORY" }), [
+    dispatch
+  ]);
+  return (
+    <div className="my-2">
+      <Button
+        className="mr-2 float-left material-icons"
+        onClick={handlePrev}
+        color="info"
+      >
+        arrow_back
+      </Button>
+      <Button
+        className="mx-2"
+        onClick={handleReveal}
+        color="success"
+        disabled={disabled}
+      >
+        Reveal
+      </Button>
+      <Button
+        className="mx-2"
+        type="reset"
+        onClick={handleReset}
+        color="danger"
+        disabled={disabled}
+      >
+        Reset
+      </Button>
+      <Button
+        className="ml-2 float-right material-icons"
+        onClick={handleNext}
+        color="info"
+      >
+        arrow_forward
+      </Button>
+    </div>
+  );
+};
 
-export default connect()(HostControls);
+export { HostControls as default };

@@ -1,44 +1,19 @@
-import React, { Component } from "react";
-import { Button, Form, Input } from "reactstrap";
-import { connect } from "react-redux";
-import { setStory } from "../actions/gameActions";
-import { isHost } from "reducers/game";
+import React, { memo } from "react";
+import { ListGroupItem } from "reactstrap";
 
-class Story extends Component {
-  state = {
-    story: ""
-  };
-  handleChange = evt => {
-    this.setState({ story: evt.target.value }, () =>
-      this.props.dispatch(setStory(this.state.story))
-    );
-  };
-  render() {
-    const { story, isHost } = this.props;
-    return (
-      <div className="my-2">
-        <h6>Story</h6>
-        {isHost ? (
-          <div>
-            <Input
-              className="my-2"
-              defaultValue={this.props.story}
-              onChange={this.handleChange}
-            />
-          </div>
-        ) : (
-          <div>
-            <span>{story}</span>
-          </div>
+const Story = memo(({ story, isCurrent }) => (
+  <ListGroupItem>
+    <div className="h-16 flex-container space-between">
+      <span className={isCurrent ? "text-success" : "text-muted"}>
+        {story.name}
+      </span>
+      <div>
+        {story.estimate && (
+          <span className="text-success">{story.estimate}</span>
         )}
       </div>
-    );
-  }
-}
+    </div>
+  </ListGroupItem>
+));
 
-const mapStateToProps = ({ game: { story }, game }) => ({
-  story,
-  isHost: isHost(game)
-});
-
-export default connect(mapStateToProps)(Story);
+export { Story as default };

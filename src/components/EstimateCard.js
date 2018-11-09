@@ -1,44 +1,42 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { estimate } from "../actions/gameActions";
+import React, { memo, useMemo, useCallback } from "react";
 import { Card, CardText, CardBody, Col } from "reactstrap";
-import { isCurrentEstimate } from "../reducers/game";
 
-class EstimateCard extends Component {
-  handleClick = () => {
-    const { value, isSelected, isDisabled, dispatch } = this.props;
-    if (!isDisabled) {
-      if (isSelected) {
-        dispatch(estimate(null));
-      } else {
-        dispatch(estimate(value));
-      }
-    }
-  };
-  render() {
+const EstimateCard = memo(
+  ({ value, dispatch, uid, estimates, showEstimates }) => {
+    const isSelected = useMemo(
+      () =>
+        !!estimates.find(
+          estimate => estimate.value === value && estimate.uid === uid
+        ),
+      [estimates, uid]
+    );
+    const handleClick = useCallback(
+      () => {
+        if (!showEstimates) {
+          if (isSelected) {
+            dispatch({ type: "ESTIMATE", payload: { value: null, uid } });
+          } else {
+            dispatch({ type: "ESTIMATE", payload: { value, uid } });
+          }
+        }
+      },
+      [showEstimates, isSelected, uid]
+    );
     return (
       <Col md={4} className="my-2">
         <Card
-          onClick={this.handleClick}
-          color={this.props.color}
-          inverse={this.props.isSelected}
+          className="shadow-sm hover-shadow"
+          onClick={handleClick}
+          color={isSelected ? "success" : null}
+          inverse={isSelected}
         >
           <CardBody>
-            <CardText>{this.props.value}</CardText>
+            <CardText>{value}</CardText>
           </CardBody>
         </Card>
       </Col>
     );
   }
-}
+);
 
-const mapStateToProps = ({ game, user: { uid } }, props) => {
-  const isSelected = isCurrentEstimate(game, { ...props, uid });
-  return {
-    isDisabled: game.showEstimates,
-    color: isSelected ? "success" : null,
-    isSelected
-  };
-};
-
-export default connect(mapStateToProps)(EstimateCard);
+export { EstimateCard as default };

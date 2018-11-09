@@ -1,25 +1,14 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { isHost } from "../reducers/game";
+import React, { memo } from "react";
 
 //TODO: add edit estimate
 
-class Estimate extends Component {
-  render() {
-    const { finalEstimate, showEstimates } = this.props;
-    return (
-      <div className="my-2">
-        <h6>Points</h6>
-        <span>{showEstimates ? finalEstimate : "-"}</span>
-      </div>
-    );
-  }
-}
-
-const mapStateToProps = ({ game, game: { finalEstimate, showEstimates } }) => ({
-  isHost: isHost(game),
-  finalEstimate,
-  showEstimates
+const Estimate = memo(({ finalEstimate, showEstimates }) => {
+  return (
+    <div className="my-2">
+      <h6>Points</h6>
+      <span>{showEstimates ? finalEstimate : "-"}</span>
+    </div>
+  );
 });
 
-export default connect(mapStateToProps)(Estimate);
+export { Estimate as default };
