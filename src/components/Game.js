@@ -61,7 +61,7 @@ const Game = props => {
           </ListGroupItem>
           {players.map(player => (
             <Player
-              isHost={isHost && host.uid === user.uid}
+              isHost={host.uid === player.uid}
               player={player}
               key={player.uid}
               showEstimates={showEstimates}

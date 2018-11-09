@@ -7,7 +7,6 @@ const initialState = {
   players: [],
   currentStory: 0,
   name: "",
-  key: null,
   estimates: [],
   stories: [],
   finalEstimate: null,
@@ -22,8 +21,8 @@ function useGameState(key) {
   useEffect(async () => {
     const gameRef = firebase.database().ref(`games/${key}`);
     const game = await gameRef.once("value").then(snapshot => snapshot.val());
-    setIsReady(true);
     dispatch({ type: "UPDATE", payload: game });
+    setIsReady(true);
   }, []);
 
   // handle updates from other players
@@ -31,11 +30,13 @@ function useGameState(key) {
     () => {
       const gameRef = firebase.database().ref(`games/${key}`);
       if (isReady) {
-        gameRef.on("value", snapshot =>
-          dispatch({ type: "UPDATE", payload: { ...snapshot.val() } })
-        );
+        gameRef.on("value", snapshot => {
+          dispatch({ type: "UPDATE", payload: { ...snapshot.val() } });
+        });
       }
-      return () => gameRef.off();
+      return () => {
+        if (isReady) gameRef.off();
+      };
     },
     [key, isReady]
   );
@@ -58,6 +59,7 @@ function useGameState(key) {
 }
 
 function reducer(state, action) {
+  state.lastAction = action.type;
   switch (action.type) {
     case "JOIN":
       return {
@@ -112,17 +114,24 @@ function reducer(state, action) {
         ...state,
         estimates: [],
         showEstimates: false,
-        finalEstimate: null
+        finalEstimate: null,
+        stories: updateCurrentStory(state, "estimate", null)
       };
     case "NEXT_STORY":
       return {
         ...state,
+        estimates: [],
+        showEstimates: false,
+        finalEstimate: null,
         currentStory: (state.currentStory + 1) % state.stories.length
       };
     case "PREVIOUS_STORY": {
       const len = state.stories.length;
       return {
         ...state,
+        estimates: [],
+        showEstimates: false,
+        finalEstimate: null,
         currentStory: (state.currentStory - 1 + len) % len
       };
     }
@@ -139,12 +148,14 @@ function reducer(state, action) {
       };
     }
     case "UPDATE":
+      // fire base not sending blank array and null values here in the payload
+      // populate from initial state
       return {
         ...state,
-        ...action.payload
+        ...{ ...initialState, ...action.payload }
       };
     default:
-      return state;
+      return { ...state };
   }
 }
 
