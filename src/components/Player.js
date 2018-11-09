@@ -9,9 +9,7 @@ const Player = ({ player, isHost, estimates, showEstimates }) => {
     },
     [estimates]
   );
-  const hasEstimated = useMemo(() => estimate && estimate.value != null, [
-    estimate
-  ]);
+  const hasEstimated = useMemo(() => estimate && estimate.value != null, [estimate]);
 
   return (
     <ListGroupItem>
@@ -24,9 +22,7 @@ const Player = ({ player, isHost, estimates, showEstimates }) => {
           {hasEstimated && !showEstimates && (
             <span className="material-icons text-success">check</span>
           )}
-          {showEstimates && (
-            <span className="text-success">{estimate.value}</span>
-          )}
+          {showEstimates && <span className="text-success">{estimate.value}</span>}
         </div>
       </div>
     </ListGroupItem>
