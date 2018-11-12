@@ -14,13 +14,13 @@ const Player = ({ player, isHost, estimates, showEstimates }) => {
     <li className="list-item">
       <span className="panel-icon">
         {hasEstimated && !showEstimates && (
-          <span className="material-icons has-text-success">check</span>
+          <span className="material-icons has-text-primary">check</span>
         )}
-        {showEstimates && <span className="has-text-success">{estimate.value}</span>}
+        {showEstimates && <span className="has-text-primary">{estimate.value}</span>}
       </span>
       <span>
-        {isHost && "👑"}
         {player.name}
+        {isHost && " 👑"}
       </span>
     </li>
   );

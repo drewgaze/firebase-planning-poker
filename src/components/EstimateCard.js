@@ -17,7 +17,7 @@ const EstimateCard = memo(({ value, dispatch, uid, estimates, showEstimates }) =
     },
     [showEstimates, isSelected, uid]
   );
-  const selectedClass = isSelected ? "has-background-success has-text-white" : "";
+  const selectedClass = isSelected ? "has-background-primary has-text-white" : "";
   const revealedClass = showEstimates && !isSelected ? "is-invisible" : "";
   return (
     <div className="column is-4">
@@ -26,7 +26,7 @@ const EstimateCard = memo(({ value, dispatch, uid, estimates, showEstimates }) =
         onClick={handleClick}
       >
         <div className="card-content">
-          <p className="has-text-centered is-size-4 has-text-weight-semibold">{value}</p>
+          <p className="has-text-centered is-size-5">{value}</p>
         </div>
       </div>
     </div>
