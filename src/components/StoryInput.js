@@ -5,7 +5,7 @@ function StoryInput({ stories, handleChange }) {
   return (
     <TagsInput
       className="field"
-      inputProps={{ className: "input", placeholder: "Add a story" }}
+      inputProps={{ className: "input", placeholder: "Press enter to add a story" }}
       renderInput={renderInput}
       renderLayout={renderLayout}
       renderTag={renderTag}

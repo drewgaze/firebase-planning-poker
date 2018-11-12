@@ -45,7 +45,7 @@ function NewGame({ history }) {
               <StoryInput stories={stories} handleChange={setStories} />
               <div className="field">
                 <button className="button is-link" type="submit" onClick={handleSubmit}>
-                  Submit
+                  Start Game
                 </button>
               </div>
             </form>
