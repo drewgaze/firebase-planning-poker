@@ -1,52 +1,43 @@
 import React, { useCallback } from "react";
-import { Button } from "reactstrap";
 
 const HostControls = ({ dispatch, disabled }) => {
-  const handleReveal = useCallback(() => dispatch({ type: "SHOW_ESTIMATES" }), [
-    dispatch
-  ]);
-  const handleReset = useCallback(() => dispatch({ type: "RESET" }), [
-    dispatch
-  ]);
-  const handleNext = useCallback(() => dispatch({ type: "NEXT_STORY" }), [
-    dispatch
-  ]);
-  const handlePrev = useCallback(() => dispatch({ type: "PREVIOUS_STORY" }), [
-    dispatch
-  ]);
+  const handleReveal = useCallback(() => dispatch({ type: "SHOW_ESTIMATES" }), [dispatch]);
+  const handleReset = useCallback(() => dispatch({ type: "RESET" }), [dispatch]);
+  const handleNext = useCallback(() => dispatch({ type: "NEXT_STORY" }), [dispatch]);
+  const handlePrev = useCallback(() => dispatch({ type: "PREVIOUS_STORY" }), [dispatch]);
   return (
-    <div className="my-2">
-      <Button
-        className="mr-2 float-left material-icons"
-        onClick={handlePrev}
-        color="info"
-      >
-        arrow_back
-      </Button>
-      <Button
-        className="mx-2"
-        onClick={handleReveal}
-        color="success"
-        disabled={disabled}
-      >
-        Reveal
-      </Button>
-      <Button
-        className="mx-2"
-        type="reset"
-        onClick={handleReset}
-        color="danger"
-        disabled={disabled}
-      >
-        Reset
-      </Button>
-      <Button
-        className="ml-2 float-right material-icons"
-        onClick={handleNext}
-        color="info"
-      >
-        arrow_forward
-      </Button>
+    <div className="columns is-mobile">
+      <div className="column">
+        <button className="button is-white is-pulled-left material-icons" onClick={handlePrev}>
+          arrow_back
+        </button>
+      </div>
+      <div className="column is-2-desktop">
+        <button
+          className="button is-primary is-pulled-left"
+          onClick={handleReveal}
+          disabled={disabled}
+        >
+          <span className="material-icons">rotate_left</span>
+          Reveal
+        </button>
+      </div>
+      <div className="column is-2-desktop">
+        <button
+          className="button is-danger is-pulled-right"
+          type="reset"
+          onClick={handleReset}
+          disabled={disabled}
+        >
+          <span className="material-icons">undo</span>
+          Reset
+        </button>
+      </div>
+      <div className="column">
+        <button className="button is-white is-pulled-right material-icons" onClick={handleNext}>
+          arrow_forward
+        </button>
+      </div>
     </div>
   );
 };

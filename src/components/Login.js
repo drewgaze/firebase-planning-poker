@@ -21,9 +21,13 @@ const Login = memo(() => {
   const user = useFirebaseAuth();
   if (user) return <Redirect to="/new" />;
   return (
-    <div>
-      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
-    </div>
+    <section className="hero is-fullheight-with-navbar">
+      <div className="hero-body">
+        <div className="container">
+          <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+        </div>
+      </div>
+    </section>
   );
 });
 

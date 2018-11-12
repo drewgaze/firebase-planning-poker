@@ -1,11 +1,11 @@
 import React, { memo } from "react";
 import TagsInput from "react-tagsinput";
-import { Input, Badge } from "reactstrap";
 
 function StoryInput({ stories, handleChange }) {
   return (
     <TagsInput
-      inputProps={{ placeholder: "Add a story" }}
+      className="field"
+      inputProps={{ className: "input", placeholder: "Add a story" }}
       renderInput={renderInput}
       renderLayout={renderLayout}
       renderTag={renderTag}
@@ -17,50 +17,38 @@ function StoryInput({ stories, handleChange }) {
 
 function renderInput({ addTag, ...props }) {
   let { onChange, value, ...other } = props;
-  return <Input type="text" onChange={onChange} value={value} {...other} />;
+  return <input type="text" onChange={onChange} value={value} {...other} />;
 }
 
 function renderTag(props) {
-  let {
-    tag,
-    key,
-    disabled,
-    onRemove,
-    classNameRemove,
-    getTagDisplayValue,
-    ...other
-  } = props;
+  let { tag, key, disabled, onRemove, classNameRemove, getTagDisplayValue, ...other } = props;
   return (
     <h6 key={key}>
-      <Badge
-        {...other}
-        color="primary"
-        className="mx-1 flex-container align-items-center"
-        pill
-      >
+      <span {...other} className="is-primary tag flex-container align-items-center">
         {getTagDisplayValue(tag)}
         {!disabled && (
-          <button
-            className="close ml-1"
+          <span
+            className="material-icons pointer"
             onClick={e => {
               e.preventDefault();
               onRemove(key);
             }}
           >
-            <span aria-hidden="true">&times;</span>
-          </button>
+            close
+          </span>
         )}
-      </Badge>
+      </span>
     </h6>
   );
 }
 
 function renderLayout(tagComponents, inputComponent) {
   return (
-    <div>
+    <>
+      <label className="label">Stories</label>
       <div className="flex-container flex-wrap">{tagComponents}</div>
-      {inputComponent}
-    </div>
+      <div className="control">{inputComponent}</div>
+    </>
   );
 }
 
