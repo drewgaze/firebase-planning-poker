@@ -10,7 +10,7 @@ const Navigation = () => {
 
   return (
     <nav className="navbar is-dark" role="navigation" aria-label="main-navigation">
-      <div class="navbar-brand">
+      <div className="navbar-brand">
         <Link className="navbar-item" to="/">
           Planning Poker
         </Link>
@@ -46,8 +46,8 @@ const Navigation = () => {
           {user && (
             <div className="navbar-item has-dropdown is-hoverable">
               <a className="navbar-link">{user.displayName}</a>
-              <div class="navbar-dropdown">
-                <a class="navbar-item" onClick={() => firebase.auth().signOut()}>
+              <div className="navbar-dropdown">
+                <a className="navbar-item" onClick={() => firebase.auth().signOut()}>
                   Log out
                 </a>
               </div>

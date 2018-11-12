@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
 import StoryTitle from "./StoryTitle";
 import Estimate from "./Estimate";
 import HostControls from "./HostControls";
@@ -40,12 +40,16 @@ const Game = props => {
     [user, isReady]
   );
 
+  const handleFabClick = useCallback(() => {
+    dispatch({ type: "ADD_STORY", payload: { name: "New Story" } });
+  }, []);
+
   return (
     <div className="columns fill is-marginless">
-      <div className="column is-3 is-hidden-mobile has-border-right has-background-light has-left-padding">
+      <div className="column is-2 is-hidden-mobile has-border-right has-background-white-bis has-left-padding">
         <aside>
           <label className="label">Players</label>
-          <ul className="list has-background-light">
+          <ul className="list has-background-white-bis">
             {players.map(player => (
               <Player
                 isHost={host.uid === player.uid}
@@ -58,7 +62,7 @@ const Game = props => {
           </ul>
         </aside>
       </div>
-      <div className="column is-6 has-background-grey-light">
+      <div className="column has-background-grey-light">
         <div className="columns">
           <div className="column">
             <StoryTitle isHost={isHost} story={currentStory} dispatch={dispatch} />
@@ -75,11 +79,21 @@ const Game = props => {
           estimates={estimates}
         />
       </div>
-      <div className="column is-3 is-hidden-mobile has-border-left has-background-light has-right-padding">
-        <asice>
-          <label className="label">Stories</label>
-          <Stories stories={stories} currentStory={index} showEstimates={showEstimates} />
-        </asice>
+      <div className="column is-2 is-hidden-mobile has-border-left has-background-white-bis has-right-padding">
+        <aside>
+          <div className="field is-horizontal">
+            <label className="label">Stories</label>
+            <button className="fab button material-icons is-primary" onClick={handleFabClick}>
+              add
+            </button>
+          </div>
+          <Stories
+            stories={stories}
+            currentStory={index}
+            showEstimates={showEstimates}
+            dispatch={dispatch}
+          />
+        </aside>
       </div>
     </div>
   );

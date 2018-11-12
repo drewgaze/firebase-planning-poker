@@ -39,6 +39,7 @@ $grey-light: #f6f8fa;
 
 .card {
   border-radius: 4px;
+  border: 1px solid $border;
 }
 
 .has-left-padding {
@@ -47,4 +48,25 @@ $grey-light: #f6f8fa;
 
 .has-right-padding {
   padding-right: 1.5rem;
+}
+
+.button .is-small {
+  font-size: 0.75rem !important;
+}
+
+.fab {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  border-radius: 50%;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+}
+
+.list-item .edit {
+  visibility: hidden;
+}
+
+.list-item:hover .edit {
+  visibility: visible;
 }

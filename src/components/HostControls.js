@@ -8,7 +8,10 @@ const HostControls = ({ dispatch, disabled }) => {
   return (
     <div className="columns is-mobile">
       <div className="column">
-        <button className="button is-white is-pulled-left material-icons" onClick={handlePrev}>
+        <button
+          className="button has-background-grey-light is-hovered is-pulled-left material-icons"
+          onClick={handlePrev}
+        >
           arrow_back
         </button>
       </div>
@@ -34,7 +37,10 @@ const HostControls = ({ dispatch, disabled }) => {
         </button>
       </div>
       <div className="column">
-        <button className="button is-white is-pulled-right material-icons" onClick={handleNext}>
+        <button
+          className="button has-background-grey-light is-hovered is-pulled-right material-icons"
+          onClick={handleNext}
+        >
           arrow_forward
         </button>
       </div>
