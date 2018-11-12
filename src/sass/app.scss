@@ -1,0 +1,50 @@
+@charset "utf-8";
+
+$card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+$grey-light: #f6f8fa;
+
+@import "../../node_modules/bulma/bulma.sass";
+
+.has-border-right {
+  border-right: 1px solid $border;
+}
+
+.has-border-left {
+  border-left: 1px solid $border;
+}
+
+.has-border-top {
+  border-top: 1px solid $border;
+}
+
+.list {
+  box-shadow: none;
+}
+
+.list-item {
+  border-radius: 0 !important;
+}
+
+.list-item:first-child {
+  border-top: 1px solid $border;
+}
+
+.panel-icon {
+  vertical-align: initial;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.card {
+  border-radius: 4px;
+}
+
+.has-left-padding {
+  padding-left: 1.5rem;
+}
+
+.has-right-padding {
+  padding-right: 1.5rem;
+}

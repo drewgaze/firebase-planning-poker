@@ -1,62 +1,61 @@
-import React, { useState, useCallback } from "react";
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
-} from "reactstrap";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import firebase from "config/firebase";
 import useFirebaseAuth from "hooks/useFirebaseAuth";
 
 const Navigation = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const user = useFirebaseAuth();
-  const toggle = useCallback(() => setIsOpen(!isOpen));
+  const [isActive, setIsActive] = useState(false);
+  const activeClass = isActive ? "is-active" : "";
 
   return (
-    <Navbar color="dark" dark expand="md">
-      <NavbarBrand tag={Link} to="/">
-        Planning Poker
-      </NavbarBrand>
-      <NavbarToggler onClick={toggle} />
-      <Collapse isOpen={isOpen} navbar>
-        <Nav className="ml-auto" navbar>
+    <nav className="navbar is-dark" role="navigation" aria-label="main-navigation">
+      <div class="navbar-brand">
+        <Link className="navbar-item" to="/">
+          Planning Poker
+        </Link>
+        <a
+          role="button"
+          onClick={() => setIsActive(!isActive)}
+          className={"navbar-burger " + activeClass}
+          aria-label="menu"
+          aria-expanded="false"
+        >
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+        </a>
+      </div>
+
+      <div className={"navbar-menu " + activeClass}>
+        <div className="navbar-end">
+          <div className="navbar-item">
+            <div className="buttons">
+              {user && (
+                <Link className="button is-primary" to="/new">
+                  New Game
+                </Link>
+              )}
+              {!user && (
+                <Link className="button is-primary" to="/login">
+                  Log in
+                </Link>
+              )}
+            </div>
+          </div>
           {user && (
-            <NavItem>
-              <NavLink tag={Link} to="/new">
-                New Game
-              </NavLink>
-            </NavItem>
+            <div className="navbar-item has-dropdown is-hoverable">
+              <a className="navbar-link">{user.displayName}</a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item" onClick={() => firebase.auth().signOut()}>
+                  Log out
+                </a>
+              </div>
+            </div>
           )}
-          {user ? (
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                {user.displayName}
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem onClick={() => firebase.auth().signOut()}>
-                  Logout
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          ) : (
-            <NavItem>
-              <NavLink tag={Link} to="/login">
-                Login
-              </NavLink>
-            </NavItem>
-          )}
-        </Nav>
-      </Collapse>
-    </Navbar>
+        </div>
+      </div>
+    </nav>
   );
 };
 

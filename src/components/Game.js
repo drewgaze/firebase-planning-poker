@@ -3,7 +3,6 @@ import StoryTitle from "./StoryTitle";
 import Estimate from "./Estimate";
 import HostControls from "./HostControls";
 import EstimateCards from "./EstimateCards";
-import { Row, Col, ListGroup, ListGroupItem } from "reactstrap";
 import Player from "./Player";
 import Stories from "./Stories";
 import useFirebaseAuth from "hooks/useFirebaseAuth";
@@ -13,24 +12,13 @@ const Game = props => {
   const user = useFirebaseAuth();
   const [game, dispatch, isReady] = useGameState(props.match.params.gameKey);
 
-  const {
-    players,
-    estimates,
-    showEstimates,
-    host,
-    stories,
-    currentStory: index,
-    finalEstimate
-  } = game;
+  const { players, estimates, showEstimates, host, stories, currentStory: index } = game;
 
-  const isHost = useMemo(() => user && host && user.uid === host.uid, [
-    user,
-    host
+  const isHost = useMemo(() => user && host && user.uid === host.uid, [user, host]);
+  const currentStory = useMemo(() => (stories.length > 0 ? stories[index] : null), [
+    index,
+    stories
   ]);
-  const currentStory = useMemo(
-    () => (stories.length > 0 ? stories[index] : null),
-    [index, stories]
-  );
 
   useEffect(
     () => {
@@ -53,58 +41,47 @@ const Game = props => {
   );
 
   return (
-    <Row className="h-100">
-      <Col className="border-right d-none d-md-block" md={3}>
-        <ListGroup flush>
-          <ListGroupItem>
-            <h6>Players</h6>
-          </ListGroupItem>
-          {players.map(player => (
-            <Player
-              isHost={host.uid === player.uid}
-              player={player}
-              key={player.uid}
-              showEstimates={showEstimates}
-              estimates={estimates}
-            />
-          ))}
-        </ListGroup>
-      </Col>
-      <Col md={6} className="mx-2 mx-md-0 blue-bg">
-        <Row>
-          <Col>
-            <StoryTitle
-              isHost={isHost}
-              story={currentStory}
-              dispatch={dispatch}
-            />
-          </Col>
-          <Col>
-            <Estimate
-              finalEstimate={finalEstimate}
-              showEstimates={showEstimates}
-            />
-          </Col>
-        </Row>
-        {isHost && (
-          <HostControls dispatch={dispatch} disabled={estimates.length <= 0} />
-        )}
+    <div className="columns fill is-marginless">
+      <div className="column is-3 is-hidden-mobile has-border-right has-background-light has-left-padding">
+        <aside>
+          <label className="label">Players</label>
+          <ul className="list has-background-light">
+            {players.map(player => (
+              <Player
+                isHost={host.uid === player.uid}
+                player={player}
+                key={player.uid}
+                showEstimates={showEstimates}
+                estimates={estimates}
+              />
+            ))}
+          </ul>
+        </aside>
+      </div>
+      <div className="column is-6 has-background-grey-light">
+        <div className="columns">
+          <div className="column">
+            <StoryTitle isHost={isHost} story={currentStory} dispatch={dispatch} />
+          </div>
+          <div className="column">
+            <Estimate estimate={currentStory && currentStory.estimate} />
+          </div>
+        </div>
+        {isHost && <HostControls dispatch={dispatch} disabled={estimates.length <= 0} />}
         <EstimateCards
           dispatch={dispatch}
           uid={user && user.uid}
           showEstimates={showEstimates}
           estimates={estimates}
         />
-      </Col>
-      <Col className="border-left d-none d-md-block" md={3}>
-        <ListGroup flush>
-          <ListGroupItem>
-            <h6>Stories</h6>
-          </ListGroupItem>
-          <Stories stories={stories} currentStory={index} />
-        </ListGroup>
-      </Col>
-    </Row>
+      </div>
+      <div className="column is-3 is-hidden-mobile has-border-left has-background-light has-right-padding">
+        <asice>
+          <label className="label">Stories</label>
+          <Stories stories={stories} currentStory={index} showEstimates={showEstimates} />
+        </asice>
+      </div>
+    </div>
   );
 };
 

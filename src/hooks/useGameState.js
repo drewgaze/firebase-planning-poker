@@ -70,10 +70,8 @@ function reducer(state, action) {
         ]
       };
     case "ESTIMATE": {
-      const estimates = state.estimates.filter(
-        estimate => estimate.uid !== action.payload.uid
-      );
-      if (action.payload.value) estimates.push(action.payload);
+      const estimates = state.estimates.filter(estimate => estimate.uid !== action.payload.uid);
+      if (action.payload.value != null) estimates.push(action.payload);
       return {
         ...state,
         estimates
@@ -105,9 +103,7 @@ function reducer(state, action) {
     case "LEAVE":
       return {
         ...state,
-        players: state.players.filter(
-          player => player.uid !== action.payload.uid
-        )
+        players: state.players.filter(player => player.uid !== action.payload.uid)
       };
     case "RESET":
       return {

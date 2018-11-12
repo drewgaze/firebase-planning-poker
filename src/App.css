@@ -1,5 +1,4 @@
 .App {
-  text-align: center;
 }
 
 .App-logo {
@@ -20,10 +19,6 @@
 
 .App-intro {
   font-size: large;
-}
-
-.small-icon {
-  font-size: 16px !important;
 }
 
 .flex-container {
@@ -48,6 +43,27 @@
 
 .hover-shadow:hover {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.tag {
+  margin-bottom: 0.5em;
+  margin-right: 0.5em;
+}
+
+.fill {
+  flex: 1;
+}
+
+.material-icons {
+  font-size: inherit !important;
+}
+
+.button .material-icons {
+  margin-right: 4px;
 }
 
 html,

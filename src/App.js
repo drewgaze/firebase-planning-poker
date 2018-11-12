@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "sass/app.scss";
 import "material-icons/iconfont/material-icons.css";
 import Nav from "./components/Nav";
 import Routes from "./components/Routes";

@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { ListGroupItem } from "reactstrap";
 
 const Player = ({ player, isHost, estimates, showEstimates }) => {
   const estimate = useMemo(
@@ -12,20 +11,18 @@ const Player = ({ player, isHost, estimates, showEstimates }) => {
   const hasEstimated = useMemo(() => estimate && estimate.value != null, [estimate]);
 
   return (
-    <ListGroupItem>
-      <div className="h-16 flex-container space-between">
-        <span>
-          {isHost && "👑"}
-          {player.name}
-        </span>
-        <div>
-          {hasEstimated && !showEstimates && (
-            <span className="material-icons text-success">check</span>
-          )}
-          {showEstimates && <span className="text-success">{estimate.value}</span>}
-        </div>
-      </div>
-    </ListGroupItem>
+    <li className="list-item">
+      <span className="panel-icon">
+        {hasEstimated && !showEstimates && (
+          <span className="material-icons has-text-success">check</span>
+        )}
+        {showEstimates && <span className="has-text-success">{estimate.value}</span>}
+      </span>
+      <span>
+        {isHost && "👑"}
+        {player.name}
+      </span>
+    </li>
   );
 };
 

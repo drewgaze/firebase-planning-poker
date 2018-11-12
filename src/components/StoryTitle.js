@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { Input } from "reactstrap";
 
 const StoryTitle = ({ isHost, story, dispatch }) => {
   const handleChange = e => {
@@ -8,15 +7,11 @@ const StoryTitle = ({ isHost, story, dispatch }) => {
     }
   };
   return (
-    <div className="my-2">
-      <h6>Story</h6>
+    <div className="field">
+      <label className="label">Story</label>
       {isHost ? (
-        <div>
-          <Input
-            className="my-2"
-            value={(story && story.name) || ""}
-            onChange={handleChange}
-          />
+        <div className="control">
+          <input className="input" value={(story && story.name) || ""} onChange={handleChange} />
         </div>
       ) : (
         <div>

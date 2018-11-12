@@ -1,16 +1,4 @@
-import React, { useState, useRef, useMutationEffect, useCallback } from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Button,
-  Row,
-  Col,
-  Form,
-  FormGroup,
-  Label,
-  Input
-} from "reactstrap";
+import React, { useState, useRef, useCallback } from "react";
 import StoryInput from "./StoryInput";
 import useFirebaseAuth from "hooks/useFirebaseAuth";
 import firebase from "config/firebase";
@@ -21,16 +9,13 @@ function NewGame({ history }) {
   const [stories, setStories] = useState([]);
   const inputRef = useRef();
 
-  useMutationEffect(() => {
-    inputRef.current = name;
-  });
-
   const handleSubmit = useCallback(
     async evt => {
       evt.preventDefault();
+      // TODO: validate form
       const key = await createGame(
         {
-          name: inputRef.current,
+          name,
           stories: stories.map(story => ({ name: story }))
         },
         user
@@ -40,34 +25,34 @@ function NewGame({ history }) {
     [history, inputRef, stories, user]
   );
   return (
-    <Row>
-      <Col lg={12}>
-        <Card>
-          <CardHeader>New Game</CardHeader>
-          <CardBody className="text-left">
-            <Form className="needs-validation">
-              <FormGroup>
-                <Label for="gameName">Game Name</Label>
-                <Input
-                  type="text"
-                  name="gameName"
-                  id="gameName"
-                  onChange={e => setName(e.target.value)}
-                  required
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="stories">Stories</Label>
-                <StoryInput stories={stories} handleChange={setStories} />
-              </FormGroup>
-              <Button type="submit" onClick={handleSubmit} color="success">
-                Create Game
-              </Button>
-            </Form>
-          </CardBody>
-        </Card>
-      </Col>
-    </Row>
+    <section className="section is-fullheight">
+      <div className="container">
+        <div className="columns">
+          <div className="column is-half is-offset-one-quarter">
+            <h1 className="title">New Game</h1>
+            <form>
+              <div className="field">
+                <label className="label">Game Name</label>
+                <div className="control">
+                  <input
+                    className="input"
+                    type="text"
+                    onChange={e => setName(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              <StoryInput stories={stories} handleChange={setStories} />
+              <div className="field">
+                <button className="button is-link" type="submit" onClick={handleSubmit}>
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
